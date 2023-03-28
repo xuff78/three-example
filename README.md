@@ -1,4 +1,4 @@
-## ThreeJS 
+## ThreeJS 绘制图例
 ###项目安装
 ```javascript
 git clone https://github.com/xuff78/three-example.git
