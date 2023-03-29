@@ -29,7 +29,7 @@ module.exports = {
     resolve: {
         // 配置解析模块路径别名: 优点简写路径 缺点路径没有提示
         alias: {
-            '@': path.resolve(__dirname, 'src')
+            '@': srcPath
         },
         // 配置省略文件路径的后缀名
         extensions: ['.js', ".json", ".jsx", ".css"],
