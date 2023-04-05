@@ -5,6 +5,7 @@ const ESLintWebpackPlugin = require('eslint-webpack-plugin')
 module.exports = {
     entry: {
         index: path.join(srcPath, 'index.js'),
+        city: path.join(srcPath, 'city.js'),
     },
     module: {
         rules: [
@@ -21,6 +22,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.join(srcPath, 'index.html'),
             filename: 'index.html',
+            chunks: ['index', 'vendor', 'common']  // 考虑代码分割
+        }),
+        new HtmlWebpackPlugin({
+            template: path.join(srcPath, 'city.html'),
+            filename: 'city.html',
+            chunks: ['city', 'vendor', 'common']  // 考虑代码分割
         }),
         new ESLintWebpackPlugin({
             context: srcPath

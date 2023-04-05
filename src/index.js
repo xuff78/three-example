@@ -1,5 +1,5 @@
 import '@/public.css'
-import { Stage } from '@/heatmap/stage'
+import { Stage } from '@/utils/stage'
 import { getEarth, getMapGeometry, loadJSON } from '@/heatmap/render'
 import { resetCameraTween } from '@/heatmap/anima'
 import { getFlyLine } from '@/heatmap/flyline'
@@ -55,7 +55,7 @@ const initStage = (stage) => {
     const { controls, scene, camera } = stage
     controls.enablePan = false
     controls.minDistance = 50
-    controls.maxDistance = 160
+    controls.maxDistance = 280
     controls.minAzimuthAngle = -Math.PI / 4
     controls.maxAzimuthAngle = Math.PI / 4
     controls.minPolarAngle = 1
@@ -75,7 +75,7 @@ const initStage = (stage) => {
     pointLightMap.position.set(0, 7, 3)
     scene.add(pointLightMap)
 
-    camera.position.set(-2.65, -98.26, 111.63) // 0, -5, 1
+    camera.position.set(-2.65, -98.26, 220) // 0, -5, 1
     camera.lookAt(new THREE.Vector3(0, 0, 0))
 
     // 点击地图事件
