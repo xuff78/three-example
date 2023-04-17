@@ -49,6 +49,7 @@ class Stage {
 
   // 连续渲染
   animate(time = 0) {
+    // console.log('animate', time)
     this.responsive()
     this.beforeRender && this.beforeRender(time)
     this.renderer.render(this.scene, this.camera)

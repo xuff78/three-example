@@ -63,7 +63,7 @@ class HeatmapImage {
   }
 
   initMesh(scene) {
-    let geometry = new THREE.PlaneGeometry(100, 100, 500, 500)
+    let geometry = new THREE.PlaneGeometry(100, 100, 300, 300)
     let material = new THREE.ShaderMaterial({
       transparent: true,
       vertexShader: vertexShader,

@@ -1,22 +1,40 @@
 import '@/public.css'
 import { Stage } from '@/utils/stage'
 import * as THREE from 'three'
-import { addBuildings } from './city/building'
+import { addBuildings, buildingShader } from './city/building'
 import { lon2xy } from './utils/math.js'
 import { addRiver } from './city/river'
 
 const mousePos = new THREE.Vector2()
-let stage, container
+const E = 121.49526536464691;//东方明珠经纬度坐标
+const N = 31.24189350905988;
+const p = lon2xy(E,N);
+const raycaster = new THREE.Raycaster()
+let stage, container, selected
 const setData = async () => {
     const { scene } = stage
     const buildGroup = new THREE.Group()
     await addBuildings(buildGroup)
     await addRiver(buildGroup)
+    const geometry = new THREE.PlaneGeometry(5800, 5800, 1, 1)
+    const material = new THREE.MeshPhongMaterial({
+        color: '#000000',
+        transparent: true,
+        opacity: 1,
+        side: THREE.FrontSide,
+        // depthTest: true,
+    })
+
+    const ground = new THREE.Mesh(geometry, material)
+    ground.position.set(p.x, p.y, -20)
+    ground.name = 'ground'
+    buildGroup.add(ground)
     scene.add(buildGroup)
     // scene.add(getEarth())
     // const result = await axios.get(`/public/data/heatmapData.json`)
     // scene.add(getMapGeometry(provinceData, edgeLightObj, projection))
     stage.animate()
+    updateTime()
 }
 
 const initStage = (stage) => {
@@ -26,21 +44,6 @@ const initStage = (stage) => {
     controls.maxDistance = 20000
     controls.minAzimuthAngle = -Math.PI / 4
     controls.maxAzimuthAngle = Math.PI / 4
-    // controls.minPolarAngle = 1
-    // controls.maxPolarAngle = Math.PI - 0.1
-
-    // const ambientLight = new THREE.AmbientLight(0x404040, 1.8)
-    // scene.add(ambientLight)
-    //
-    // const test = new THREE.PointLight('#ffffff', 1.8, 1000)
-    // test.position.set(200, 400, 300)
-    // scene.add(test)
-    // const testHelperMap = new THREE.PointLightHelper(test)
-    // scene.add(testHelperMap)
-    //
-    // const pointLightMap = new THREE.PointLight('#4161ff', 1.4, 20)
-    // pointLightMap.position.set(0, 7, 3)
-    // scene.add(pointLightMap)
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(200, 400, 300)
@@ -51,16 +54,14 @@ const initStage = (stage) => {
     const ambient = new THREE.AmbientLight(0xffffff, 0.3);
     scene.add(ambient);
 
-    // camera.position.set(-2, -2, 11.63) // 0, -5, 1
-    const E = 121.49526536464691;//东方明珠经纬度坐标
-    const N = 31.24189350905988;
-    const p = lon2xy(E,N);
     camera.position.set(13524889, 3657486, 5465)
     camera.lookAt(p.x, p.y, 0)
     controls.target.set(p.x, p.y,0);
 
     // 点击地图事件
-    const onClick = () => {}
+    const onClick = () => {
+        // updateTime()
+    }
 
     const onMouseMove = (event) => {
         mousePos.x = (event.layerX / container.clientWidth) * 2 - 1
@@ -70,9 +71,39 @@ const initStage = (stage) => {
     container.addEventListener('click', onClick)
 }
 
+const handleMouseover = () => {
+    raycaster.setFromCamera(mousePos, stage.camera)
+    const intersects = raycaster.intersectObjects(
+        stage.scene.children,
+        true, // true，则同时也会检测所有物体的后代
+    )
+    if (intersects.length > 0) {
+        selected = intersects.find(i => i.object.name === 'ground')
+        // console.log('intersects', intersects)
+        // console.log("x坐标:"+selected.point.x)
+        // console.log("y坐标:"+selected.point.y)
+        // console.log("z坐标:"+selected.point.z)
+    }
+}
+
 container = document.getElementById('container')
 if (container) {
-    stage = new Stage(container)
+    stage = new Stage(container,  () => {
+        handleMouseover()
+    })
     initStage(stage)
     setData()
+}
+
+const clock = new THREE.Clock()
+function updateTime() {
+    const deltaTime = clock.getDelta()
+    const time = buildingShader.uniforms.time
+    time.value += deltaTime
+    if (time.value > 10) time.value = 0
+    if (selected) {
+        const uClickPosition = buildingShader.uniforms.uClickPosition
+        uClickPosition.value = [selected.point.x, selected.point.y]
+    }
+    requestAnimationFrame(updateTime)
 }
