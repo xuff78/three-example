@@ -24,7 +24,7 @@ function ShapeMesh(pointsArrs) {
     const geometry = new THREE.ShapeGeometry( //填充多边形
         shapeArr,
     )
-    const material = new THREE.MeshLambertMaterial({
+    const material = new THREE.MeshPhongMaterial({
         color: '#0D6DC6',
         // color: 0x001c1a,
     })

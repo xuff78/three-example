@@ -5,8 +5,7 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer'
 class Stage {
   // 渲染器
   // 初始化场景
-  constructor(container, beforeRender) {
-    this.beforeRender = beforeRender
+  constructor(container, config = {}) {
     this.scene = new Scene()
     this.renderer = new WebGLRenderer({ antialias: true })
     const { clientWidth, clientHeight } = container
@@ -20,7 +19,9 @@ class Stage {
     // this.labelRenderer.domElement.style.pointerEvents = 'none'
     container.appendChild(this.labelRenderer.domElement)
 
-    this.camera = new PerspectiveCamera(30, clientWidth / clientHeight, 1, 30000)
+    this.beforeRender = config.beforeRender
+    const cc = config.camera || {}
+    this.camera = new PerspectiveCamera(cc.fov || 30, clientWidth / clientHeight, cc.near || 1, cc.far || 30000)
     this.controls = new OrbitControls(this.camera, this.labelRenderer.domElement)
     // this.controls.update()
   }

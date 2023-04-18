@@ -55,7 +55,7 @@ const initStage = (stage) => {
     const { controls, scene, camera } = stage
     controls.enablePan = false
     controls.minDistance = 50
-    controls.maxDistance = 280
+    controls.maxDistance = 360
     controls.minAzimuthAngle = -Math.PI / 4
     controls.maxAzimuthAngle = Math.PI / 4
     controls.minPolarAngle = 1
@@ -140,7 +140,7 @@ if (container) {
         .center([111, 36]) //
         // .scale(2000)
         .translate([0, 0]) // container.clientWidth / 2, container.clientHeight / 2
-    stage = new Stage(container, beforeRender)
+    stage = new Stage(container, { beforeRender })
     initStage(stage)
     setData()
 }

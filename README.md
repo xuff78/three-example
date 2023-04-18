@@ -12,3 +12,10 @@ npm run dev
 
 ![avatar](https://raw.githubusercontent.com/xuff78/three-example/master/public/img/heatmap.png?raw=true)
 
+城市图：由带高度的geojson生成城市鸟瞰图。
+
+![avatar](https://raw.githubusercontent.com/xuff78/three-example/master/public/img/city.png?raw=true)
+
+模拟地球
+
+![avatar](https://raw.githubusercontent.com/xuff78/three-example/master/public/img/earth.png?raw=true)

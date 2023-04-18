@@ -1,6 +1,6 @@
 /**
  * 经纬度坐标转墨卡托坐标
- * @param {经度(角度值)} longitude 
+ * @param {经度(角度值)} longitude
  * @param {维度(角度值)} latitude
  */
 // 墨卡托坐标系：展开地球，赤道作为x轴，向东为x轴正方，本初子午线作为y轴，向北为y轴正方向。
@@ -16,6 +16,27 @@ function lon2xy(longitude, latitude) {
         y: y, //墨卡托y坐标——对应维度
     }
 }
+
+const lon2xyz = (
+    radius,
+    longitude,
+    latitude
+) => {
+    var lon = (longitude * Math.PI) / 180; //转弧度值
+    var lat = (latitude * Math.PI) / 180; //转弧度值
+    lon = -lon; // three.js坐标系z坐标轴对应经度-90度，而不是90度
+
+    // 经纬度坐标转球面坐标计算公式
+    var x = radius * Math.cos(lat) * Math.cos(lon);
+    var y = radius * Math.sin(lat);
+    var z = radius * Math.cos(lat) * Math.sin(lon);
+    // 返回球面坐标
+    return {
+        x: x,
+        y: y,
+        z: z,
+    };
+};
 export {
-    lon2xy
+    lon2xy, lon2xyz
 }

@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         index: path.join(srcPath, 'index.js'),
         city: path.join(srcPath, 'city.js'),
+        earth: path.join(srcPath, 'earth.js'),
     },
     module: {
         rules: [
@@ -28,6 +29,11 @@ module.exports = {
             template: path.join(srcPath, 'city.html'),
             filename: 'city.html',
             chunks: ['city', 'vendor', 'common']  // 考虑代码分割
+        }),
+        new HtmlWebpackPlugin({
+            template: path.join(srcPath, 'earth.html'),
+            filename: 'earth.html',
+            chunks: ['earth', 'vendor', 'common']  // 考虑代码分割
         }),
         new ESLintWebpackPlugin({
             context: srcPath
